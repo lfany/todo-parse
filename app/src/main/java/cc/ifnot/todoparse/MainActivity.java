@@ -1,9 +1,11 @@
 package cc.ifnot.todoparse;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
-import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,9 +14,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+        if(ParseUser.getCurrentUser() == null){
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }else{
+            Toast.makeText(getApplicationContext(), "Welcome " + ParseUser.getCurrentUser().getUsername()
+                    , Toast.LENGTH_SHORT).show();
+        }
+
+//        ParseObject testObject = new ParseObject("TestObject");
+//        testObject.put("foo", "bar");
+//        testObject.saveInBackground();
 
     }
 }
