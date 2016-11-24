@@ -1,4 +1,4 @@
-package cc.ifnot.todoparse;
+package cc.ifnot.todoparse.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
+
+import cc.ifnot.todoparse.R;
 
 public class MainActivity extends AppCompatActivity {
 

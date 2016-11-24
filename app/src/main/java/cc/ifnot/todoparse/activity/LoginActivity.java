@@ -1,4 +1,4 @@
-package cc.ifnot.todoparse;
+package cc.ifnot.todoparse.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -32,6 +33,8 @@ import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cc.ifnot.todoparse.R;
 
 
 /**
@@ -73,18 +76,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(false);
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailRegisterButton = (Button) findViewById(R.id.register);
+        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin(false);
+            }
+        });
+
+        Button mEmailSignInButton = (Button) findViewById(R.id.sign_in);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin(true);
             }
         });
 
@@ -102,7 +113,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin(boolean login) {
         if (mAuthTask != null) {
             return;
         }
@@ -145,37 +156,60 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            final ParseUser user = new ParseUser();
-            user.setUsername(userName);
-            user.setEmail(email);
-            user.setPassword(password);
-            user.signUpInBackground(new SignUpCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null){
+            if (!login) {
+                showProgress(true);
+                final ParseUser user = new ParseUser();
+                user.setUsername(userName);
+                user.setEmail(email);
+                user.setPassword(password);
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
 //                        注册成功
-                        showProgress(false);
-                        user.logInInBackground(userName, password, new LogInCallback() {
-                            @Override
-                            public void done(ParseUser user, ParseException e) {
-                                if (e == null){
-                                    if(user.isAuthenticated()){
-                                        Toast.makeText(getApplicationContext(), "用户已登录...",
-                                                Toast.LENGTH_SHORT).show();
-                                        finish();
+                            showProgress(false);
+                            user.logInInBackground(userName, password, new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException e) {
+                                    if (e == null) {
+                                        if (user.isAuthenticated()) {
+                                            Toast.makeText(getApplicationContext(), "用户已登录...",
+                                                    Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    } else {
+                                        e.printStackTrace();
                                     }
-                                }else{
-                                    e.printStackTrace();
                                 }
-                            }
-                        });
+                            });
 
-                    }else{
-                        e.printStackTrace();
+                        } else {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                showProgress(true);
+                final ParseUser user = new ParseUser();
+                user.setUsername(userName);
+                user.setEmail(email);
+                user.setPassword(password);
+                user.logInInBackground(userName, password, new LogInCallback() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if(e == null){
+                            showProgress(false);
+                            if (user.isAuthenticated()) {
+                                Toast.makeText(getApplicationContext(), "用户已登录...",
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }else{
+                            Logger.d(e);
+                        }
+                    }
+                });
+            }
         }
     }
 
