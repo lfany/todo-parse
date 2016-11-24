@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.parse.ParseUser;
 
 import cc.ifnot.todoparse.R;
+import cc.ifnot.todoparse.TodoApp;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseAnalytics firebaseAnalytics = TodoApp.getTodoApp().getFirebaseAnalytics();
+        firebaseAnalytics.setAnalyticsCollectionEnabled(true);
 
         if(ParseUser.getCurrentUser() == null){
             Intent intent = new Intent(this, LoginActivity.class);

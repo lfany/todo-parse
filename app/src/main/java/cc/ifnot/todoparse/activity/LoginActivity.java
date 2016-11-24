@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.orhanobut.logger.Logger;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -35,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.ifnot.todoparse.R;
+import cc.ifnot.todoparse.TodoApp;
 
 
 /**
@@ -148,6 +151,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, userName);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, email);
+        bundle.putString(FirebaseAnalytics.Param.VALUE, password);
+        bundle.putString(FirebaseAnalytics.Param.SIGN_UP_METHOD, login ? "login" : "register");
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "text");
+        FirebaseAnalytics mFirebaseAnalytics = TodoApp.getTodoApp().getFirebaseAnalytics();
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first

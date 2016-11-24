@@ -20,7 +20,7 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file('app/todo.jks')
+//            storeFile file('todo.jks')
         }
     }
 }
@@ -35,8 +35,10 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     compile 'com.android.support:design:25.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.0'
+    compile 'com.google.firebase:firebase-core:10.0.0'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'
