@@ -3,6 +3,7 @@ package cc.ifnot.todoparse;
 import android.app.Application;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.parse.Parse;

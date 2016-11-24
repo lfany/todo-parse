@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.crash.FirebaseCrash;
 import com.orhanobut.logger.Logger;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -190,12 +190,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                             finish();
                                         }
                                     } else {
+                                        FirebaseCrash.report(e);
                                         e.printStackTrace();
                                     }
                                 }
                             });
 
                         } else {
+                            FirebaseCrash.report(e);
                             e.printStackTrace();
                         }
                     }
@@ -217,6 +219,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 finish();
                             }
                         }else{
+                            FirebaseCrash.report(e);
                             Logger.d(e);
                         }
                     }
